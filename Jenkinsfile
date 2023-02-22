@@ -1,7 +1,7 @@
 def imageName = 'mlabouardy/movies-marketplace'
 def registry = 'https://registry.slowcoder.com'
 
-node('workers'){
+node(''){
     stage('Checkout'){
         checkout scm
     }
