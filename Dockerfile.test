@@ -4,7 +4,7 @@ ENV CHROME_BIN=chromium
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y chromium-browser
+RUN apt-get update && apt-get install -y chromium
 
 COPY package-lock.json .
 COPY package.json .
