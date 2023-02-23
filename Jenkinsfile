@@ -19,6 +19,10 @@ node(''){
         
     }
 
+    stage('Build'){
+        docker.build(imageName, '--build-arg ENVIRONMENT=sandbox .')
+    }
+
     // stage('Static Code Analysis'){
     //     withSonarQubeEnv('sonarqube') {
     //         sh 'sonar-scanner'
