@@ -13,8 +13,8 @@ pipeline {
 
         stage('Quality tests'){
 
-            script(
-                steps{
+            steps(
+                script{
                 def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
                 sh "docker run --rm ${imageName}-test npm run lint --force"
                 }
@@ -23,8 +23,8 @@ pipeline {
         }
 
         stage('Unit tests'){
-            script(
-                steps{
+            steps(
+                script{
                     sh "echo 'pass tests'"
                 }
             )
@@ -32,8 +32,8 @@ pipeline {
         }
 
         stage('Build'){
-            script(
-                steps{
+            steps(
+                script{
                     dockerImage = docker.build(myImageName)
                 }
             )
@@ -41,8 +41,8 @@ pipeline {
         }
 
         stage('Push'){
-            script(
-                steps{
+            steps(
+                script{
                     withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
                     dockerImage.push(commitID())
 
