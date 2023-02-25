@@ -30,30 +30,30 @@ pipeline {
 
         }
 
-        // stage('Build'){
-        //     steps(
-        //         script{
-        //             dockerImage = docker.build(myImageName)
-        //         }
-        //     )
+        stage('Build'){
+            steps{
+                script{
+                    dockerImage = docker.build(myImageName)
+                }
+            }
 
-        // }
+        }
 
-        // stage('Push'){
-        //     steps(
-        //         script{
-        //             withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-        //             dockerImage.push(commitID())
+        stage('Push'){
+            steps{
+                script{
+                    withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
+                    dockerImage.push(commitID())
 
-        //             if (env.BRANCH_NAME == 'develop') {
-        //                 dockerImage.push('develop')
-        //                 }
+                    if (env.BRANCH_NAME == 'develop') {
+                        dockerImage.push('develop')
+                        }
         
-        //         }
-        //     }
-        //     )
+                }
+            }
+            }
 
-        // }
+        }
 
 
     }
