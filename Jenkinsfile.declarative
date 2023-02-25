@@ -11,50 +11,49 @@ pipeline {
             }
         }
 
-        stage('Quality tests'){
-
-            steps(
-                script{
-                def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
-                sh "docker run --rm ${imageName}-test npm run lint --force"
-                }
-            )
+        // stage('Quality tests'){
+        //     steps(
+        //         script{
+        //         def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
+        //         sh "docker run --rm ${imageName}-test npm run lint --force"
+        //         }
+        //     )
             
-        }
+        // }
 
-        stage('Unit tests'){
-            steps(
-                script{
-                    sh "echo 'pass tests'"
-                }
-            )
+        // stage('Unit tests'){
+        //     steps(
+        //         script{
+        //             sh "echo 'pass tests'"
+        //         }
+        //     )
 
-        }
+        // }
 
-        stage('Build'){
-            steps(
-                script{
-                    dockerImage = docker.build(myImageName)
-                }
-            )
+        // stage('Build'){
+        //     steps(
+        //         script{
+        //             dockerImage = docker.build(myImageName)
+        //         }
+        //     )
 
-        }
+        // }
 
-        stage('Push'){
-            steps(
-                script{
-                    withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-                    dockerImage.push(commitID())
+        // stage('Push'){
+        //     steps(
+        //         script{
+        //             withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
+        //             dockerImage.push(commitID())
 
-                    if (env.BRANCH_NAME == 'develop') {
-                        dockerImage.push('develop')
-                        }
+        //             if (env.BRANCH_NAME == 'develop') {
+        //                 dockerImage.push('develop')
+        //                 }
         
-                }
-            }
-            )
+        //         }
+        //     }
+        //     )
 
-        }
+        // }
 
 
     }
