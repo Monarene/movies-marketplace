@@ -1,5 +1,5 @@
 def imageName = 'mlabouardy/movies-marketplace'
-def registry = 'https://registry.slowcoder.com'
+def myImageName = 'monarene/movies-marketplace'
 
 // send test
 
@@ -20,7 +20,7 @@ node(''){
     }
 
     stage('Build'){
-        docker.build(imageName, '--build-arg ENVIRONMENT=sandbox .')
+        dockerImage = docker.build(myimageName)
     }
 
     // stage('Static Code Analysis'){
@@ -38,24 +38,23 @@ node(''){
     //     }
     // }
 
-    // stage('Build'){
-    //     docker.build(imageName, '--build-arg ENVIRONMENT=sandbox .')
-    // }
+    stage('Push'){
+        withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
+        dockerImage.push(commitID())
+        
+        if (env.BRANCH_NAME == 'develop') {
+            dockerImage.push('develop')
+        }
+        
+        }
+        
+    }
 
-    // stage('Push'){
-    //     docker.withRegistry(registry, 'registry') {
-    //         docker.image(imageName).push(commitID())
-
-    //         if (env.BRANCH_NAME == 'develop') {
-    //             docker.image(imageName).push('develop')
-    //         }
-    //     }
-    // }
 }
 
-// def commitID() {
-//     sh 'git rev-parse HEAD > .git/commitID'
-//     def commitID = readFile('.git/commitID').trim()
-//     sh 'rm .git/commitID'
-//     commitID
-// }
+def commitID() {
+    sh 'git rev-parse HEAD > .git/commitID'
+    def commitID = readFile('.git/commitID').trim()
+    sh 'rm .git/commitID'
+    commitID
+}
