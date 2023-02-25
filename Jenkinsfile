@@ -20,7 +20,7 @@ node(''){
     }
 
     stage('Build'){
-        dockerImage = docker.build(myimageName)
+        dockerImage = docker.build(myImageName)
     }
 
     // stage('Static Code Analysis'){
