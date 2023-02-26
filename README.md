@@ -1,3 +1,5 @@
+[![Build Status](http://18.221.180.115:8080/job/watchlist/job/movies-marketplace/job/develop/badge/icon)](http://18.221.180.115:8080/job/watchlist/job/movies-marketplace/job/develop/)
+
 # Marketplace
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.19.
