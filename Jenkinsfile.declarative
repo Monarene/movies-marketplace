@@ -13,36 +13,46 @@ pipeline {
 
         stage('Quality tests'){
             steps{
-                def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
-                sh "docker run --rm ${imageName}-test npm run lint --force"
-
-
+                script {
+                    def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
+                    sh "docker run --rm ${imageName}-test npm run lint --force"
+                }
             }
+            
         }
 
         stage('Unit tests'){
             steps{
-                sh "echo 'pass tests'"
-            }
+                script{
+                    sh "echo 'pass tests'"
+                }
+        }
+
         }
 
         stage('Build'){
             steps{
-                dockerImage = docker.build(myImageName)
+                script{
+                    dockerImage = docker.build(myImageName)
+                }
             }
+
         }
 
         stage('Push'){
             steps{
-                withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-                dockerImage.push(commitID())
-        
-                if (env.BRANCH_NAME == 'develop') {
-                    dockerImage.push('develop')
-                    }
+                script{
+                    withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
+                    dockerImage.push(commitID())
+
+                    if (env.BRANCH_NAME == 'develop') {
+                        dockerImage.push('develop')
+                        }
         
                 }
             }
+            }
+
         }
 
 
