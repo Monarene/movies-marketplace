@@ -1,3 +1,4 @@
+[![Build Status](http://18.221.180.115:8080/job/watchlist/job/movies-marketplace/job/feat%252Fjenkins-check-test/badge/icon)](http://18.221.180.115:8080/job/watchlist/job/movies-marketplace/job/feat%252Fjenkins-check-test/)
 # Marketplace
 
 ## Jenkins Test branch
