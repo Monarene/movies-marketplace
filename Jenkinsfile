@@ -63,12 +63,6 @@ node(''){
 
 }
 
-def commitID() {
-    sh 'git rev-parse HEAD > .git/commitID'
-    def commitID = readFile('.git/commitID').trim()
-    sh 'rm .git/commitID'
-    commitID
-}
 
 def notifySlack(String buildStatus){
     buildStatus =  buildStatus ?: 'SUCCESSFUL'
