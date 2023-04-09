@@ -32,11 +32,11 @@ node(''){
         }
 
         stage('Static Code Analysis'){
-           sh'echo "Static Code Analysis Complete'
+           sh'echo "Static Code Analysis Complete"'
         }
 
         stage("Quality Gate"){
-            sh'echo "Quality Analysis Complete'
+            sh'echo "Quality Analysis Complete"'
         }
 
         stage('Build'){
