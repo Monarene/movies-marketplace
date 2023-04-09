@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiURL: '',
+  name: 'production',
+  apiURL: 'https://rth65vizrb.execute-api.eu-west-3.amazonaws.com/production',
 };

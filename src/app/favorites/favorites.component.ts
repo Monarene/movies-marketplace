@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 
@@ -7,7 +8,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./favorites.component.css']
 })
 export class FavoritesComponent implements OnInit {
-  private movies: Array<any> = new Array<any>();
+  public movies: Array<any> = new Array<any>();
 
   constructor(private apiService: ApiService) {
     this.getMovies();

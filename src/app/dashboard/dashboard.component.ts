@@ -1,5 +1,7 @@
+/* tslint:disable */
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,8 +9,9 @@ import { ApiService } from '../api.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  private movies: Array<any> = new Array<any>();
+  public movies: Array<any> = new Array<any>();
   public keyword: string;
+  public runtime = environment.name;
 
   constructor(private apiService: ApiService) {
     this.getMovies();
@@ -28,10 +31,11 @@ export class DashboardComponent implements OnInit {
   public searchMovie(){
     this.apiService.getMovie(this.keyword).subscribe(data => {
       this.movies = [];
-      if(Array.isArray(data))
+      if(Array.isArray(data)){
         this.movies = data;
-      else
+      } else {
         this.movies.push(data);
+      }
     }, err => {
       this.movies = [];
     })

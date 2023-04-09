@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
@@ -31,8 +32,8 @@ export class MovieComponent implements OnInit {
       }, {
           type: 'success',
           placement: {
-            from: "bottom",
-            align: "right"
+            from: 'bottom',
+            align: 'right'
           },
           time: 800000,
         });
@@ -44,8 +45,8 @@ export class MovieComponent implements OnInit {
       }, {
           type: 'danger',
           placement: {
-            from: "bottom",
-            align: "right"
+            from: 'bottom',
+            align: 'right'
           },
           time: 800000,
         });

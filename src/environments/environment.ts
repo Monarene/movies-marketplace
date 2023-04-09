@@ -4,5 +4,6 @@
 
 export const environment = {
   production: false,
+  name: 'sandbox',
   apiURL: '',
 };

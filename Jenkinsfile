@@ -1,68 +1,70 @@
 def imageName = 'mlabouardy/movies-marketplace'
-def myImageName = 'monarene/movies-marketplace'
-
-// send test
+def bucket = 'marketplace.slowcoder.com'
+def region = 'eu-west-3'
+def environments = ['master':'production', 'preprod':'staging', 'develop':'sandbox']
 
 node(''){
-
-        try {
-    stage('Checkout'){
-        checkout scm
-    }
-
-    def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
-
-    stage('Quality Tests'){
-        sh "docker run --rm ${imageName}-test npm run lint --force"
-    }
-
-    stage('Unit Tests'){
-        sh "echo 'pass tests'"
-        
-    }
-
-    stage('Build'){
-        dockerImage = docker.build(myImageName)
-    }
-
-    // stage('Static Code Analysis'){
-    //     withSonarQubeEnv('sonarqube') {
-    //         sh 'sonar-scanner'
-    //     }
-    // }
-
-    // stage("Quality Gate"){
-    //     timeout(time: 5, unit: 'MINUTES') {
-    //         def qg = waitForQualityGate()
-    //         if (qg.status != 'OK') {
-    //             error "Pipeline aborted due to quality gate failure: ${qg.status}"
-    //         }
-    //     }
-    // }
-
-    stage('Push'){
-        withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-        dockerImage.push(commitID())
-        
-        if (env.BRANCH_NAME == 'develop') {
-            dockerImage.push('develop')
+    try{
+        stage('Checkout'){
+            checkout scm
+            notifySlack('STARTED')
         }
-        
-        }
-        
-    }
 
-    } 
-    catch(e){
+        def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
+
+        stage('Quality Tests'){
+            sh "docker run --rm ${imageName}-test npm run lint"
+        }
+
+        stage('Unit Tests'){
+            sh "docker run --rm -v $PWD/coverage:/app/coverage ${imageName}-test npm run test"
+            publishHTML (target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: "$PWD/coverage/marketplace",
+                reportFiles: "index.html",
+                reportName: "Coverage Report"
+            ])
+        }
+
+        stage('Static Code Analysis'){
+            withSonarQubeEnv('sonarqube') {
+                sh 'sonar-scanner'
+            }
+        }
+
+        stage("Quality Gate"){
+            timeout(time: 5, unit: 'MINUTES') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
+            }
+        }
+
+        stage('Build'){
+            sh """
+                docker build -t ${imageName} --build-arg ENVIRONMENT=${environments[env.BRANCH_NAME]} .
+                containerName=\$(docker run -d ${imageName})
+                docker cp \$containerName:/app/dist dist
+                docker rm -f \$containerName
+            """
+        }
+
+        if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'preprod' || env.BRANCH_NAME == 'develop'){
+            stage('Push'){
+                sh "aws s3 cp --recursive dist/ s3://${bucket}/${environments[env.BRANCH_NAME]}/"
+            }
+        }
+    } catch(e){
         currentBuild.result = 'FAILED'
         throw e
     } finally {
         notifySlack(currentBuild.result)
+        sh 'rm -rf dist'
     }
-
-
 }
-
 
 def notifySlack(String buildStatus){
     buildStatus =  buildStatus ?: 'SUCCESSFUL'

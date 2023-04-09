@@ -1,12 +1,13 @@
+nodes_modules
+coverage
+sonar-scanner-*
+.scannerwork
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
 dist
 tmp
-.scannerwork
 out-tsc
-*.tgz
-sonar-scanner-*
 # Only exists if Bazel was run
 bazel-out
 
