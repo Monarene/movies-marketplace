@@ -3,6 +3,9 @@ def bucket = 'marketplace.jenkins'
 def region = 'us-east-2'
 def environments = ['master':'production', 'preprod':'staging', 'serverless':'sandbox']
 
+
+// build trigger 1
+
 node(''){
     try{
         stage('Checkout'){
