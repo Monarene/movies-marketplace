@@ -4,7 +4,7 @@ def region = 'us-east-2'
 def environments = ['master':'production', 'preprod':'staging', 'serverless':'sandbox']
 
 
-// build trigger 1
+// build trigger 2
 
 node(''){
     try{
